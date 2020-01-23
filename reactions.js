@@ -78,7 +78,7 @@ function command(msg) {
   switch (words[0]){
     case 'say':
 		case 'echo':
-      msg.channel.send(msg.content)
+      msg.reply(message.slice(msg.content[0].length+1, message.length));
       break;
     case 'play':
      function play(connection, msg){
