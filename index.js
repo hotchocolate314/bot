@@ -10,10 +10,11 @@ client.on('ready', () => {
 
 client.on('message', async msg => {
   if(msg.author.bot) return;
-  if(msg.content.search(prefix) == 0){
+  respond(msg);
+  /*if(msg.content.search(prefix) == 0){
     msg.content = msg.content.slice(1,msg.content.length)
     respond(msg)
-  }
+  }*/
 })
 
 client.login(token);

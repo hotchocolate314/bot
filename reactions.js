@@ -1,7 +1,22 @@
 var servers = {};
 const ytdl = require('ytdl-core');
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
-async function getTime(){
+var jsonObj;
+function loadDoc() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            jsonObj = JSON.parse(this.responseText);
+       }
+    };
+    xhttp.open("GET", "https://erewhon.xyz/copypasta/api/random", true);
+    xhttp.send();
+}
+
+loadDoc();
+
+function getTime(){
     var date = new Date();
     var hours = date.getHours();
     var minutes = date.getMinutes();
@@ -9,18 +24,34 @@ async function getTime(){
     if(hours < 10) { hours = "0" + hours; }
     if(minutes < 10) { minutes = "0" + minutes; }
     if(seconds < 10) { seconds = "0" + seconds; }
-    return ("The time is: " + hours + ":" + minutes + ":" + seconds);
+    return ("The time is: " + hours + ":" + minutes + ":" + seconds + " GMT");
 }
 
 async function respond(msg){
-  msg.content = msg.content.split(" ");
-  switch (msg.content[0]){
+  switch (msg.content){
     case 'ping':
       msg.reply('FUCK OFF');
       break;
     case 'what\'s the time?':
       msg.reply(getTime())
       break;
+    case 'mods?':
+      msg.channel.send('ASLEEP AS FUCK');
+      break;
+    case 'sieg zeon':
+      msg.channel.send('https://i.ytimg.com/vi/emzROzHwsSk/hqdefault.jpg');
+      break;
+    case 'sieg zion':
+      msg.channel.send('https://i.redd.it/69xsc94129b01.png');
+      break;
+    case 'copypasta pls':
+      loadDoc();
+      msg.channel.send(jsonObj["content"]);
+      break;
+  }
+  var message = msg.content;
+  msg.content = msg.content.split(" ");
+  switch (msg.content[0]){
     case 'say':
       msg.reply(msg.content[1])
       break;
@@ -60,6 +91,10 @@ async function respond(msg){
         play(connection, msg);
       })
   }
+
+  if(message.search('<@!497882898519818250>') == 0){ msg.reply("FUCK YOU"); }
+
+  if(message.search('strongly abuse') == 0){ msg.reply("NO ABUSE"); }
 }
 
 module.exports = respond;
