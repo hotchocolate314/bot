@@ -1,20 +1,26 @@
-var servers = {};
+const fs = require("fs");
 const ytdl = require('ytdl-core');
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+const {prefix} = require('./config.json');
 
-var jsonObj;
-function loadDoc() {
+var servers = {}; //global variable to hold music queue
+var copypastaObject; //global variable to hold retrieved copypastas
+
+//initialising variables and stuff below
+loadNewPasta(); //this initialises the object to contain a pasta as soon as the server starts
+var beginningSentenceReactions = JSON.parse(fs.readFileSync("json/beginningSentenceReactions.json").toString());
+var inSentenceReactions = JSON.parse(fs.readFileSync("json/inSentenceReactions.json").toString());
+
+function loadNewPasta() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            jsonObj = JSON.parse(this.responseText);
+          copypastaObject = JSON.parse(this.responseText);
        }
     };
     xhttp.open("GET", "https://erewhon.xyz/copypasta/api/random", true);
     xhttp.send();
 }
-
-loadDoc();
 
 function getTime(){
     var date = new Date();
@@ -27,104 +33,103 @@ function getTime(){
     return ("The time is: " + hours + ":" + minutes + ":" + seconds + " GMT");
 }
 
-function spokenWord(msg) {
-  switch (msg.content){
-    case 'ping':
-      msg.reply('FUCK OFF');
-      break;
-    case 'what\'s the time?':
-      msg.reply(getTime())
-      break;
-    case 'mods?':
-      msg.channel.send('ASLEEP AS FUCK');
-      break;
-    case 'sieg zeon':
-      msg.channel.send('https://i.ytimg.com/vi/emzROzHwsSk/hqdefault.jpg');
-      break;
-    case 'sieg zion':
-      msg.channel.send('https://i.redd.it/69xsc94129b01.png');
-      break;
-    case 'copypasta pls':
-      loadDoc();
-      msg.channel.send(jsonObj["content"]);
-			break;
-		case '<@!497882898519818250>':
-			msg.reply('FUCK YOU');
-			break;
-		case 'strongly abuse':
-			msg.reply('NO ABUSE');
-      break;
-		default: return false;
-  }
-	return true;
+
+function regexGen(input){ //https://stackoverflow.com/a/874742/, to add regex support directly from the JSON files
+	var flags = input.replace(/.*\/([gimy]*)$/, '$1');
+	var pattern = input.replace(new RegExp('^/(.*?)/'+flags+'$'), '$1');
+	return new RegExp(pattern, flags);
 }
 
-const regexps = [
-		{r: /nya/i, resp: ':3'},
-		{r: /i can'?t believe/i, resp: 'believe it!'},
-		{r: /flounders/i, resp: '>forcing memes'}
-];
-function regexp(msg) {
-	for (let regx of regexps) {
-			if (regx.r.exec(msg).length > 0) {
-					msg.channel.send(regx.resp);
-					return !!regx.quit;
-			}
-	}
+function spokenWord(msg){
+    var reaction = beginningSentenceReactions[msg.content];
+    if(reaction){ //handles cases where the thing just said matches a whole sentence
+        if(reaction["regex"] == false){
+            msg.channel.send(reaction["resp"]);
+        }
+    }else{
+        for(var key in beginningSentenceReactions){
+            if(beginningSentenceReactions[key]["regex"]){
+                if(msg.content.search(regexGen(key)) == 0){
+                    msg.channel.send(beginningSentenceReactions[key]["resp"]);
+                }
+            }
+        }
+    }
+
+    for(var key in inSentenceReactions){ //handles cases where we want the bot to respond to whatever is in here no matter where in the sentence
+        if(!inSentenceReactions[key]["regex"]){
+            if(msg.content.search(key) != -1){
+                msg.channel.send(inSentenceReactions[key]["resp"]);
+            }
+        }else{
+            if(msg.content.search(regexGen(key)) != -1){
+                msg.channel.send(inSentenceReactions[key]["resp"]);
+            }
+        }
+    }
 }
 
-function command(msg) {
-  const words = msg.content.split(" ");
-  switch (words[0]){
-    case 'say':
-		case 'echo':
-      msg.reply(message.slice(msg.content[0].length+1, message.length));
-      break;
-    case 'play':
-     function play(connection, msg){
-       var server = servers[msg.guild.id]
-       server.dispatcher = connection.playStream(ytdl(server.queue[0], {filter: "audioonly"}));
-       server.queue.shift();
+function playMusic(msg){
+    msg.content = msg.content.split(" ");
 
-       server.dispatcher.on("end", () => {
-         if(server.queue[0]){
-           play(connection, msg);
-         }else{
-           connection.disconnect();
-         }
-       })
-     }
+    function play(connection, msg){
+        var server = servers[msg.guild.id]
+        server.dispatcher = connection.playStream(ytdl(server.queue[0], {filter: "audioonly"}));
+        server.queue.shift();
 
-		if(!msg.content[1]){
-			msg.channel.send("You need to provide a link.")
-			break;
-		}
+        server.dispatcher.on("end", () => {
+            if(server.queue[0]){
+                play(connection, msg);
+            }else{
+                connection.disconnect();
+            }
+        });
+    }
 
-		if(!msg.member.voiceChannel){
-			msg.channel.send("Join a voice channel first.")
-			break;
-		}
+    if(!msg.content[1]){
+        msg.channel.send("You need to provide a link.")
+        return;
+    }
 
-		if(!servers[msg.guild.id]) servers[msg.guild.id] = {
-			queue: []
-		}
+    if(!msg.member.voiceChannel){
+        msg.channel.send("Join a voice channel first.")
+        return;
+    }
 
-		var server = servers[msg.guild.id];
-		server.queue.push(msg.content[1]);
+    if(!servers[msg.guild.id]) servers[msg.guild.id] = {
+        queue: []
+    }
 
-		if(!msg.guild.voiceConnection) msg.member.voiceChannel.join().then((connection) => {
-				console.log('playing: ' + server.queue[0]);
-				play(connection, msg);
-		});
-		break;
-  }
+    var server = servers[msg.guild.id];
+    server.queue.push(msg.content[1]);
+
+    if(!msg.guild.voiceConnection) msg.member.voiceChannel.join().then((connection) => {
+        play(connection, msg);
+    });
+}
+
+function command(msg){
+    if(msg.content.search(prefix) == 0){
+        msg.content = msg.content.slice(1, msg.content.length);
+        
+        switch (msg.content){
+            case 'play':
+                playMusic(msg);
+                break;
+            case 'copypasta pls':
+                msg.channel.send(copypastaObject);
+                loadNewPasta();
+                break;
+            case 'what\'s the time?':
+                msg.channel.search(getTime());
+                break;
+        }
+    }
 }
 
 async function respond(msg){
 	// if we match a spoken word, stop pipeline
 	if (spokenWord(msg)) return;
-	// we may want to stop the pipeline for some regexps
-	if (regexp(msg)) return;
 	// finally, try for commands
 	if (command(msg)) return;
 }

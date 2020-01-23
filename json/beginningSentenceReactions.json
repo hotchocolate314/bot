@@ -1,0 +1,7 @@
+{
+    "ping": {"resp": "FUCK OFF", "regex": false},
+    "/mods/i": {"resp": "ASLEEP AS FUCK", "regex": true},
+    "sieg zeon": {"resp": "https://i.ytimg.com/vi/emzROzHwsSk/hqdefault.jpg", "regex": false},
+    "sieg zion": {"resp": "https://i.redd.it/69xsc94129b01.png", "regex": false},
+    "/sad!?/i": {"resp": "haha!", "regex": true}
+}
