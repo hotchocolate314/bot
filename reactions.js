@@ -55,10 +55,8 @@ function spokenWord(msg) {
 			msg.reply('NO ABUSE');
 			break;
 		default: 
-			console.log('default spoken word');
 			return false;
   	}
-	console.log('matched spoken word');
 	return true;
 }
 
