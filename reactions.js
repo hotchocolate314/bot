@@ -108,19 +108,18 @@ function playMusic(msg){
 }
 
 function command(msg){
+    switch (msg.content){
+        case 'copypasta pls':
+            msg.channel.send(copypastaObject["content"]);
+            loadNewPasta();
+            break;
+        case 'what\'s the time?':
+            msg.channel.send(getTime());
+            break;
+    }
+
     if(msg.content.search(prefix) == 0){
         msg.content = msg.content.slice(1, msg.content.length);
-	
-        switch (msg.content){
-            case 'copypasta pls':
-                msg.channel.send(copypastaObject);
-                loadNewPasta();
-                break;
-            case 'what\'s the time?':
-                msg.channel.search(getTime());
-                break;
-        }
-
         var msgSwitch = msg.content.split(" ")[0];
         switch (msgSwitch){
             case 'play':
