@@ -53,9 +53,12 @@ function spokenWord(msg) {
 			break;
 		case 'strongly abuse':
 			msg.reply('NO ABUSE');
-      break;
-		default: return false;
-  }
+			break;
+		default: 
+			console.log('default spoken word');
+			return false;
+  	}
+	console.log('matched spoken word');
 	return true;
 }
 
@@ -79,8 +82,8 @@ function command(msg) {
   switch (words[0]){
     case 'say':
 		case 'echo':
-      msg.reply(message.slice(msg.content[0].length+1, message.length));
-      break;
+      		msg.channel.send(words.splice(1).join(" "));
+		break;
     case 'play':
      function play(connection, msg){
        var server = servers[msg.guild.id]
