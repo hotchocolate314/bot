@@ -53,7 +53,7 @@ async function respond(msg){
   msg.content = msg.content.split(" ");
   switch (msg.content[0]){
     case 'say':
-      msg.reply(msg.content[1])
+      msg.reply(message.slice(msg.content[0].length+1, message.length));
       break;
     case 'play':
      function play(connection, msg){
