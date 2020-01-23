@@ -72,8 +72,8 @@ function playMusic(msg){
     msg.content = msg.content.split(" ");
 
     function play(connection, msg){
-        var server = servers[msg.guild.id]
-        server.dispatcher = connection.playStream(ytdl(server.queue[0], {filter: "audioonly"}));
+        var server = servers[msg.guild.id];
+        server.dispatcher = connection.playStream(ytdl(server.queue[0], {filter: "audioonly"})); //THIS LINE FAILS
         server.queue.shift();
 
         server.dispatcher.on("end", () => {
@@ -110,17 +110,21 @@ function playMusic(msg){
 function command(msg){
     if(msg.content.search(prefix) == 0){
         msg.content = msg.content.slice(1, msg.content.length);
-        
+	
         switch (msg.content){
-            case 'play':
-                playMusic(msg);
-                break;
             case 'copypasta pls':
                 msg.channel.send(copypastaObject);
                 loadNewPasta();
                 break;
             case 'what\'s the time?':
                 msg.channel.search(getTime());
+                break;
+        }
+
+        var msgSwitch = msg.content.split(" ")[0];
+        switch (msgSwitch){
+            case 'play':
+                playMusic(msg);
                 break;
         }
     }
