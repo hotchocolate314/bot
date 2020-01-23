@@ -66,10 +66,11 @@ const regexps = [
 ];
 function regexp(msg) {
 	for (let regx of regexps) {
-			if (regx.r.exec(msg).length > 0) {
-					msg.channel.send(regx.resp);
-					return !!regx.quit;
-			}
+		const m = regx.r.exec(msg);
+		if (m && m.length) {
+			msg.channel.send(regx.resp);
+			return !!regx.quit;
+		}
 	}
 }
 
