@@ -2,5 +2,7 @@
     "/nya/i": {"resp": ":3", "regex": true},
     "/i can'?t believe/i": {"resp": "believe it!", "regex": true},
     "/flounders/i": {"resp": ">forcing memes", "regex": true},
-    "/brutally abuse snoopy/i": {"resp": "YES YES OH MY GOD YES THIS SO MUCH", "regex": true}
+    "/brutally abuse snoopy/i": {"resp": "YES YES OH MY GOD YES THIS SO MUCH", "regex": true},
+    "/wtflip/i": {"resp": "watch your goddamn shitty fucking fucky language", "regex": true},
+    "/wtfrick/i": {"resp": "watch your goddamn shitty fucking fucky language", "regex": true}
 }
