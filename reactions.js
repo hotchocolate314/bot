@@ -33,7 +33,6 @@ function getTime(){
     return ("The time is: " + hours + ":" + minutes + ":" + seconds + " GMT");
 }
 
-
 function regexGen(input){ //https://stackoverflow.com/a/874742/, to add regex support directly from the JSON files
 	var flags = input.replace(/.*\/([gimy]*)$/, '$1');
 	var pattern = input.replace(new RegExp('^/(.*?)/'+flags+'$'), '$1');

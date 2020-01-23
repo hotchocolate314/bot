@@ -9,7 +9,8 @@
   "dependencies": {
     "discord.js": "^11.5.1",
     "ffmpeg": "0.0.4",
-    "ffmpeg-binaries": "^4.0.0",
+    "ffmpeg-static": "^3.0.0",
+    "lzma-native": "^6.0.0",
     "opusscript": "0.0.7",
     "xmlhttprequest": "^1.8.0",
     "ytdl-core": "^1.0.7"
