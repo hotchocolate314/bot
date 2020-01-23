@@ -65,7 +65,9 @@ function spokenWord(msg) {
 const regexps = [
 		{r: /nya/i, resp: ':3'},
 		{r: /i can'?t believe/i, resp: 'believe it!'},
-		{r: /flounders/i, resp: '>forcing memes'}
+		{r: /flounders/i, resp: '>forcing memes'},
+		{r: /wtflip/i, resp: 'watch your goddamn shitty fucking fucky language'},
+		{r: /wtfrick/i, resp: 'watch your goddamn shitty fucking fucky language'},
 ];
 function regexp(msg) {
 	for (let regx of regexps) {
@@ -82,7 +84,7 @@ function command(msg) {
   switch (words[0]){
     case 'say':
 		case 'echo':
-      		msg.channel.send(words.splice(1).join(" "));
+			msg.channel.send(words.splice(1).join(" "));
 		break;
     case 'play':
      function play(connection, msg){
