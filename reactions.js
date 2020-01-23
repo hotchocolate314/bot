@@ -27,7 +27,7 @@ function getTime(){
     return ("The time is: " + hours + ":" + minutes + ":" + seconds + " GMT");
 }
 
-async function respond(msg){
+function spokenWord(msg) {
   switch (msg.content){
     case 'ping':
       msg.reply('FUCK OFF');
@@ -47,13 +47,38 @@ async function respond(msg){
     case 'copypasta pls':
       loadDoc();
       msg.channel.send(jsonObj["content"]);
+			break;
+		case '<@!497882898519818250>':
+			msg.reply('FUCK YOU');
+			break;
+		case 'strongly abuse':
+			msg.reply('NO ABUSE');
       break;
+		default: return false;
   }
-  var message = msg.content;
-  msg.content = msg.content.split(" ");
-  switch (msg.content[0]){
+	return true;
+}
+
+const regexps = [
+		{r: /nya/i, resp: ':3'},
+		{r: /i can'?t believe/i, resp: 'believe it!'},
+		{r: /flounders/i, resp: '>forcing memes'}
+];
+function regexp(msg) {
+	for (let regx of regexps) {
+			if (regx.r.exec(msg).length > 0) {
+					msg.channel.send(regx.resp);
+					return !!regx.quit;
+			}
+	}
+}
+
+function command(msg) {
+  const words = msg.content.split(" ");
+  switch (words[0]){
     case 'say':
-      msg.reply(msg.content[1])
+		case 'echo':
+      msg.channel.send(msg.content)
       break;
     case 'play':
      function play(connection, msg){
@@ -70,31 +95,38 @@ async function respond(msg){
        })
      }
 
-     if(!msg.content[1]){
-        msg.channel.send("You need to provide a link.")
-        break;
-      }
-      if(!msg.member.voiceChannel){
-        msg.channel.send("Join a voice channel first.")
-        break;
-      }
-      if(!servers[msg.guild.id]) servers[msg.guild.id] = {
-        queue : []
-      }
+		if(!msg.content[1]){
+			msg.channel.send("You need to provide a link.")
+			break;
+		}
 
-      var server = servers[msg.guild.id];
+		if(!msg.member.voiceChannel){
+			msg.channel.send("Join a voice channel first.")
+			break;
+		}
 
-      server.queue.push(msg.content[1]);
+		if(!servers[msg.guild.id]) servers[msg.guild.id] = {
+			queue: []
+		}
 
-      if(!msg.guild.voiceConnection) msg.member.voiceChannel.join().then((connection) => {
-        console.log('playing: ' + server.queue[0]);
-        play(connection, msg);
-      })
+		var server = servers[msg.guild.id];
+		server.queue.push(msg.content[1]);
+
+		if(!msg.guild.voiceConnection) msg.member.voiceChannel.join().then((connection) => {
+				console.log('playing: ' + server.queue[0]);
+				play(connection, msg);
+		});
+		break;
   }
+}
 
-  if(message.search('<@!497882898519818250>') == 0){ msg.reply("FUCK YOU"); }
-
-  if(message.search('strongly abuse') == 0){ msg.reply("NO ABUSE"); }
+async function respond(msg){
+	// if we match a spoken word, stop pipeline
+	if (spokenWord(msg)) return;
+	// we may want to stop the pipeline for some regexps
+	if (regexp(msg)) return;
+	// finally, try for commands
+	if (command(msg)) return;
 }
 
 module.exports = respond;
