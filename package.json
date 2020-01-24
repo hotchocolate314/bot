@@ -14,7 +14,6 @@
     "node-opus": "^0.3.3",
     "opusscript": "0.0.7",
     "xmlhttprequest": "^1.8.0",
-    "node-opus": "^0.3.3",
     "ytdl-core": "^1.0.7"
   },
   "devDependencies": {
