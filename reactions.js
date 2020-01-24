@@ -3,6 +3,7 @@ const ytdl = require('ytdl-core');
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const {prefix} = require('./config.json');
 const discord = require("discord.js");
+const ytlist = require('youtube-playlist');
 
 var servers = {}; //global variable to hold music queue
 var copypastaObject; //global variable to hold retrieved copypastas
@@ -99,60 +100,89 @@ async function playMusic(msg){
     if(!servers[msg.guild.id]) servers[msg.guild.id] = {
         queue: []
     }
-    
-    var server = servers[msg.guild.id];
-    var pushItem = {
-        requesterID: msg.member.id,
-        url: msg.content[1]
-    };
-    server.queue.push(pushItem);
-    
-    const songInfo = await ytdl.getInfo(server.queue[server.queue.length-1].url);
-    const song = {
-        title: songInfo.title,
-        url: songInfo.video_url,
-        thumbnail: songInfo.player_response.videoDetails.thumbnail["thumbnails"][3]["url"]
-    };
 
-    if(song.title){ //it can't get vid details and stuff if this is undefined
-        msg.channel.send(embedMaker("#27ae60", "Added song to queue:\n***" + song.title + "***", "cute little music bot", song.thumbnail, song.url));
-        if(!msg.guild.voiceConnection) msg.member.voiceChannel.join().then((connection) => {
-            play(connection, msg);
+    var server = servers[msg.guild.id];
+    
+    if(msg.content[1].search('playlist') == -1){ //different routine if it's a playlist
+        const songInfo = await ytdl.getInfo(msg.content[1]);
+        const song = {
+            title: songInfo.title,
+            url: songInfo.video_url,
+            thumbnail: songInfo.player_response.videoDetails.thumbnail["thumbnails"][3]["url"]
+        };
+
+        var pushItem = {
+            requesterID: msg.member.id,
+            url: msg.content[1],
+            title: song.title
+        };
+        server.queue.push(pushItem);
+
+        if(song.title){ //it can't get vid details and stuff if this is undefined
+            msg.channel.send(embedMaker("#27ae60", "Added song to queue:\n***" + song.title + "***", "cute little music bot", song.thumbnail, song.url));
+            if(!msg.guild.voiceConnection) msg.member.voiceChannel.join().then((connection) => {
+                play(connection, msg);
+            });
+        }
+    }else{
+        async function playlistToQueue(urlsObj){
+            var urls = urlsObj.data.playlist;
+            var validSongCount = 0;
+            for(var i = 0; i < urls.length; i++){
+                const songInfo = await ytdl.getInfo(urls[i]);
+                if(songInfo.title){
+                    server.queue.push({requesterID: msg.member.id, url: urls[i], title: songInfo.title});
+                    validSongCount++;
+                }
+            }
+            msg.channel.send(embedMaker("#27ae60", "Added " + validSongCount + " songs to the queue!", "cute little music bot"));
+            
+            if(!msg.guild.voiceConnection) msg.member.voiceChannel.join().then((connection) => {
+                play(connection, msg);
+            });
+
+        }
+
+        var url = msg.content[1];
+        ytlist(url, "url").then(res => {
+            playlistToQueue(res);
         });
     }
 }
 
 function skip(msg) {
     var server = servers[msg.guild.id];
-    if(msg.member.id != server.currentlyPlaying.requesterID) return msg.channel.send('You do not have permission to skip this song!');
-    if (!msg.member.voiceChannel) return msg.channel.send('You have to be in a voice channel to skip the music!');
-    if (!server.queue.length) return msg.channel.send('There is no song that I could skip!');
-    server.dispatcher.end();
+    if(server.currentlyPlaying){
+        if(msg.member.id != server.currentlyPlaying.requesterID) return msg.channel.send('You do not have permission to skip this song!');
+        if (!msg.member.voiceChannel) return msg.channel.send('You have to be in a voice channel to skip the music!');
+        if (!server.queue.length) return msg.channel.send('There is no song that I could skip!');
+        server.dispatcher.end();
+    }
 }
 
 function stop(msg) {
     var server = servers[msg.guild.id];
-    if(msg.member.id != server.currentlyPlaying.requesterID) return msg.channel.send('You do not have permission to stop the music!');
-    if (!msg.member.voiceChannel) return msg.channel.send('You have to be in a voice channel to stop the music!');
-    server.queue.length = 0;
-    server.dispatcher.end();
+    if(server.currentlyPlaying){
+        if(msg.member.id != server.currentlyPlaying.requesterID) return msg.channel.send('You do not have permission to stop the music!');
+        if (!msg.member.voiceChannel) return msg.channel.send('You have to be in a voice channel to stop the music!');
+        server.queue.length = 0;
+        server.dispatcher.end();
+    }
 }
 
 function nowPlaying(msg){
     var server = servers[msg.guild.id];
-    if (!msg.member.voiceChannel) return msg.channel.send('You have to be in a voice channel to stop the music!');
-    msg.channel.send(embedMaker("#27ae60", "Now playing:\n***" + server.currentlyPlaying.title + "***", "cute little music bot"));
+    if(server.currentlyPlaying){
+        if (!msg.member.voiceChannel) return msg.channel.send('You have to be in a voice channel to stop the music!');
+        msg.channel.send(embedMaker("#27ae60", "Now playing:\n***" + server.currentlyPlaying.title + "***", "cute little music bot"));
+    }
 }
 
 async function printQueue(msg){
     var server = servers[msg.guild.id];
     var description = "";
     for(var i = 0; i < server.queue.length; i++){
-        const songInfo = await ytdl.getInfo(server.queue[i].url);
-        const song = {
-            title: songInfo.title
-        };
-        description += "\n" + (i+1) + ": ***" + song.title + "***";
+        description += "\n" + (i+1) + ": ***" + server.queue[i].title + "***";
     }
     if(description.length == 0) { description = "\n*No queued songs.*"; }
     msg.channel.send(embedMaker("#27ae60", "Queued songs: " + description));
@@ -187,6 +217,11 @@ function spokenWord(msg){
     }
 }
 
+function say(msg){
+    msg.content = msg.content.slice(4, msg.content.length);
+    msg.channel.send(msg.content);
+}
+
 function command(msg){
     switch (msg.content){
         case 'copypasta pls':
@@ -198,7 +233,14 @@ function command(msg){
             break;
     }
 
+    switch (msg.content.split(" ")[0]){
+        case 'say':
+            say(msg);
+            break;
+    }
+
     if(msg.content.search(prefix) == 0){
+        var originalMsg = msg.content;
         msg.content = msg.content.slice(1, msg.content.length);
         var msgSwitch = msg.content.split(" ")[0];
         switch (msgSwitch){
