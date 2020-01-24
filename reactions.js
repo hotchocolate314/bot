@@ -2,6 +2,7 @@ const fs = require("fs");
 const ytdl = require('ytdl-core');
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const {prefix} = require('./config.json');
+const discord = require("discord.js");
 
 var servers = {}; //global variable to hold music queue
 var copypastaObject; //global variable to hold retrieved copypastas
@@ -39,6 +40,82 @@ function regexGen(input){ //https://stackoverflow.com/a/874742/, to add regex su
 	return new RegExp(pattern, flags);
 }
 
+function embedMaker(colour, description, title, image, link){
+    return new discord.RichEmbed()
+        .setColor(colour)
+        .setTitle(title)
+        .setDescription(description)
+        .setImage(image)
+        .setFooter(link)
+}
+
+async function playMusic(msg){
+    msg.content = msg.content.split(" ");
+
+    async function play(connection, msg){
+        var server = servers[msg.guild.id];
+
+        const songInfo = await ytdl.getInfo(server.queue[server.queue.length-1]);
+        const song = {
+            title: songInfo.title,
+            url: songInfo.video_url,
+            thumbnail: songInfo.player_response.videoDetails.thumbnail["thumbnails"][3]["url"]
+        };
+
+        if(song.title){ //it can't get vid details and stuff if this is undefined
+            msg.channel.send(embedMaker("#27ae60", "Now playing:\n***" + song.title + "***", "cute little music bot", song.thumbnail, song.url));
+
+            server.dispatcher = connection.playStream(ytdl(server.queue[0], {quality: "highestaudio"})); //THIS LINE FAILS sometimes
+            server.queue.shift();
+        }
+
+        server.dispatcher.on("end", () => {
+            if(server.queue[0]){
+                play(connection, msg);
+            }else{
+                connection.disconnect();
+            }
+        });
+    }
+
+    if(!msg.content[1]){
+        msg.channel.send("You need to provide a link.")
+        return;
+    }
+
+    if(!msg.member.voiceChannel){
+        msg.channel.send("Join a voice channel first.")
+        return;
+    }
+
+    if(!servers[msg.guild.id]) servers[msg.guild.id] = {
+        queue: []
+    }
+
+    var server = servers[msg.guild.id];
+    server.queue.push(msg.content[1]);
+    
+    const songInfo = await ytdl.getInfo(server.queue[0]);
+    const song = {
+        title: songInfo.title,
+        url: songInfo.video_url,
+        thumbnail: songInfo.player_response.videoDetails.thumbnail["thumbnails"][3]["url"]
+    };
+
+    if(song.title){ //it can't get vid details and stuff if this is undefined
+        msg.channel.send(embedMaker("#27ae60", "Added song to queue:\n***" + song.title + "***", "cute little music bot", song.thumbnail, song.url));
+        if(!msg.guild.voiceConnection) msg.member.voiceChannel.join().then((connection) => {
+            play(connection, msg);
+        });
+    }
+}
+
+function skip(message, serverQueue) {
+    if (!message.member.voiceChannel) return message.channel.send('You have to be in a voice channel to stop the music!');
+    if (!serverQueue) return message.channel.send('There is no song that I could skip!');
+    serverQueue.dispatcher.end();
+}
+
 function spokenWord(msg){
     var reaction = beginningSentenceReactions[msg.content];
     if(reaction){ //handles cases where the thing just said matches a whole sentence
@@ -68,46 +145,6 @@ function spokenWord(msg){
     }
 }
 
-function playMusic(msg){
-    msg.content = msg.content.split(" ");
-
-    function play(connection, msg){
-        var server = servers[msg.guild.id];
-        msg.channel.send("Now playing: " + server.queue[0]);
-        server.dispatcher = connection.playStream(ytdl(server.queue[0], {quality: "highestaudio"})); //THIS LINE FAILS
-        server.queue.shift();
-
-        server.dispatcher.on("end", () => {
-            if(server.queue[0]){
-                play(connection, msg);
-            }else{
-                connection.disconnect();
-            }
-        });
-    }
-
-    if(!msg.content[1]){
-        msg.channel.send("You need to provide a link.")
-        return;
-    }
-
-    if(!msg.member.voiceChannel){
-        msg.channel.send("Join a voice channel first.")
-        return;
-    }
-
-    if(!servers[msg.guild.id]) servers[msg.guild.id] = {
-        queue: []
-    }
-
-    var server = servers[msg.guild.id];
-    server.queue.push(msg.content[1]);
-
-    if(!msg.guild.voiceConnection) msg.member.voiceChannel.join().then((connection) => {
-        play(connection, msg);
-    });
-}
-
 function command(msg){
     switch (msg.content){
         case 'copypasta pls':
@@ -126,6 +163,8 @@ function command(msg){
             case 'play':
                 playMusic(msg);
                 break;
+            case 'skip':
+                skip(msg, servers[msg.guild.id]);
         }
     }
 }
