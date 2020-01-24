@@ -73,7 +73,8 @@ function playMusic(msg){
 
     function play(connection, msg){
         var server = servers[msg.guild.id];
-        server.dispatcher = connection.playStream(ytdl(server.queue[0], {filter: "audioonly"})); //THIS LINE FAILS
+        msg.channel.send("Now playing: " + server.queue[0]);
+        server.dispatcher = connection.playStream(ytdl(server.queue[0], {quality: "highestaudio"})); //THIS LINE FAILS
         server.queue.shift();
 
         server.dispatcher.on("end", () => {
