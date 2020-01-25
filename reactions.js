@@ -12,6 +12,31 @@ var copypastaObject; //global variable to hold retrieved copypastas
 loadNewPasta(); //this initialises the object to contain a pasta as soon as the server starts
 var beginningSentenceReactions = JSON.parse(fs.readFileSync("json/beginningSentenceReactions.json").toString());
 var inSentenceReactions = JSON.parse(fs.readFileSync("json/inSentenceReactions.json").toString());
+var randomSayJSON = JSON.parse(fs.readFileSync("json/randomSay.json").toString());
+
+function probability(p){
+    return (Math.random() <= p);
+}
+
+function randomSay(msg){
+    var random = Math.random();
+    var saySentence = "";
+    var lastFreq = 0;
+    for(var key in randomSayJSON){
+        if(random < randomSayJSON[key]["freq"]){
+            if(saySentence == ""){
+                lastFreq = randomSayJSON[key]["freq"];
+                saySentence = randomSayJSON[key]["resp"];
+            }else if(randomSayJSON[key]["freq"] < lastFreq){
+                lastFreq = randomSayJSON[key]["freq"];
+                saySentence = randomSayJSON[key]["resp"];
+            }
+        }
+    }
+    if(saySentence != ""){
+        msg.channel.send(saySentence);
+    }
+}
 
 function loadNewPasta() {
     var xhttp = new XMLHttpRequest();
@@ -190,21 +215,21 @@ async function printQueue(msg){
     }
 }
 
-async function randomplay(msg){
-
-}
-
 function spokenWord(msg){
     var reaction = beginningSentenceReactions[msg.content];
     if(reaction){ //handles cases where the thing just said matches a whole sentence
         if(reaction["regex"] == false){
-            msg.channel.send(reaction["resp"]);
+            if(probability(reaction["freq"])){
+                msg.channel.send(reaction["resp"]);
+            }
         }
     }else{
         for(var key in beginningSentenceReactions){
             if(beginningSentenceReactions[key]["regex"]){
                 if(msg.content.search(regexGen(key)) == 0){
-                    msg.channel.send(beginningSentenceReactions[key]["resp"]);
+                    if(probability(beginningSentenceReactions[key]["freq"])){
+                        msg.channel.send(beginningSentenceReactions[key]["resp"]);
+                    }
                 }
             }
         }
@@ -213,11 +238,15 @@ function spokenWord(msg){
     for(var key in inSentenceReactions){ //handles cases where we want the bot to respond to whatever is in here no matter where in the sentence
         if(!inSentenceReactions[key]["regex"]){
             if(msg.content.search(key) != -1){
-                msg.channel.send(inSentenceReactions[key]["resp"]);
+                if(probability(inSentenceReactions[key]["freq"])){
+                    msg.channel.send(inSentenceReactions[key]["resp"]);
+                }
             }
         }else{
             if(msg.content.search(regexGen(key)) != -1){
-                msg.channel.send(inSentenceReactions[key]["resp"]);
+                if(probability(inSentenceReactions[key]["freq"])){
+                    msg.channel.send(inSentenceReactions[key]["resp"]);
+                }
             }
         }
     }
@@ -272,8 +301,10 @@ function command(msg){
 async function respond(msg){
 	// if we match a spoken word, stop pipeline
 	if (spokenWord(msg)) return;
-	// finally, try for commands
-	if (command(msg)) return;
+	// then, try for commands
+    if (command(msg)) return;
+    // finally, probably nothing so just try some random shit
+    randomSay(msg); return;
 }
 
 module.exports = respond;

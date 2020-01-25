@@ -1,8 +1,12 @@
 {
-    "/nya/i": {"resp": ":3", "regex": true},
-    "/i can'?t believe/i": {"resp": "believe it!", "regex": true},
-    "/flounders/i": {"resp": ">forcing memes", "regex": true},
-    "/brutally abuse snoopy/i": {"resp": "YES YES OH MY GOD YES THIS SO MUCH", "regex": true},
-    "/wtflip/i": {"resp": "watch your goddamn shitty fucking fucky language", "regex": true},
-    "/wtfrick/i": {"resp": "watch your goddamn shitty fucking fucky language", "regex": true}
+    "/nya/i": {"resp": ":3", "regex": true, "freq": 1.0},
+    "/i can'?t believe/i": {"resp": "believe it!", "regex": true, "freq": 0.03},
+    "/flounders/i": {"resp": ">forcing memes", "regex": true, "freq": 0.4},
+    "/brutally abuse/i": {"resp": "YES YES OH MY GOD YES THIS SO MUCH", "regex": true, "freq": 0.1},
+    "/wtflip/i": {"resp": "watch your goddamn shitty fucking fucky language", "regex": true, "freq": 1.0},
+    "/wtfrick/i": {"resp": "watch your goddamn shitty fucking fucky language", "regex": true, "freq": 1.0},
+    "/lmao/i": {"resp": "haha!", "regex": true, "freq": 0.01},
+    "/lol/i": {"resp": "haha!", "regex": true, "freq": 0.01},
+    "/lel/i": {"resp": "haha!", "regex": true, "freq": 0.01},
+    "/kek/i": {"resp": "haha!", "regex": true, "freq": 0.01}
 }

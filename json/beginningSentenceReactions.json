@@ -1,8 +1,8 @@
 {
-    "ping": {"resp": "FUCK OFF", "regex": false},
-    "/mods/i": {"resp": "ASLEEP AS FUCK", "regex": true},
-    "sieg zeon": {"resp": "https://i.ytimg.com/vi/emzROzHwsSk/hqdefault.jpg", "regex": false},
-    "sieg zion": {"resp": "https://i.redd.it/69xsc94129b01.png", "regex": false},
-    "/sad!?/i": {"resp": "haha!", "regex": true},
-    "/shadow/i": {"resp": "WOKE AS FUCK", "regex": true}
+    "ping": {"resp": "FUCK OFF", "regex": false, "freq": 1.0},
+    "/mods/i": {"resp": "ASLEEP AS FUCK", "regex": true, "freq": 0.5},
+    "sieg zeon": {"resp": "https://i.ytimg.com/vi/emzROzHwsSk/hqdefault.jpg", "regex": false, "freq": 1.0},
+    "sieg zion": {"resp": "https://i.redd.it/69xsc94129b01.png", "regex": false, "freq": 1.0},
+    "/sad/i": {"resp": "haha!", "regex": true, "freq": 0.05},
+    "/shadow/i": {"resp": "WOKE AS FUCK", "regex": true, "freq": 0.2}
 }
