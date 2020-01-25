@@ -158,11 +158,13 @@ function skip(msg) {
 
 function stop(msg) {
     var server = servers[msg.guild.id];
-    if(server.currentlyPlaying){
-        if(msg.member.id != server.currentlyPlaying.requesterID) return msg.channel.send('You do not have permission to stop the music!');
-        if (!msg.member.voiceChannel) return msg.channel.send('You have to be in a voice channel to stop the music!');
-        server.queue.length = 0;
-        server.dispatcher.end();
+    if(server){
+        if(server.currentlyPlaying){
+            if(msg.member.id != server.currentlyPlaying.requesterID) return msg.channel.send('You do not have permission to stop the music!');
+            if (!msg.member.voiceChannel) return msg.channel.send('You have to be in a voice channel to stop the music!');
+            server.queue.length = 0;
+            server.dispatcher.end();
+        }
     }
 }
 
