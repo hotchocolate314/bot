@@ -61,16 +61,16 @@ async function playMusic(msg){
         const song = {
             title: songInfo.title,
             url: songInfo.video_url,
-            thumbnail: songInfo.player_response.videoDetails.thumbnail["thumbnails"][3]["url"]
+            //thumbnail: songInfo.player_response.videoDetails.thumbnail["thumbnails"][3]["url"]
         };
 
         if(song.title){ //it can't get vid details and stuff if this is undefined
-            msg.channel.send(embedMaker("#27ae60", "Now playing:\n***" + song.title + "***", "cute little music bot", song.thumbnail, song.url));
+            msg.channel.send(embedMaker("#27ae60", "Now playing:\n***" + song.title + "***", "cute little music bot", /*song.thumbnail,*/ song.url));
 
             server.currentlyPlaying = {};
             server.currentlyPlaying.title = song.title;
             server.currentlyPlaying.url = song.url;
-            server.currentlyPlaying.thumbnail = song.thumbnail;
+            //server.currentlyPlaying.thumbnail = song.thumbnail;
             server.currentlyPlaying.requesterID = server.queue[0].requesterID;
 
             server.dispatcher = connection.playStream(ytdl(server.queue[0].url, {quality: "highestaudio"})); //THIS LINE FAILS sometimes
@@ -108,7 +108,7 @@ async function playMusic(msg){
         const song = {
             title: songInfo.title,
             url: songInfo.video_url,
-            thumbnail: songInfo.player_response.videoDetails.thumbnail["thumbnails"][3]["url"]
+            //thumbnail: songInfo.player_response.videoDetails.thumbnail["thumbnails"][3]["url"]
         };
 
         var pushItem = {
@@ -119,7 +119,7 @@ async function playMusic(msg){
         server.queue.push(pushItem);
 
         if(song.title){ //it can't get vid details and stuff if this is undefined
-            msg.channel.send(embedMaker("#27ae60", "Added song to queue:\n***" + song.title + "***", "cute little music bot", song.thumbnail, song.url));
+            msg.channel.send(embedMaker("#27ae60", "Added song to queue:\n***" + song.title + "***", "cute little music bot", /*song.thumbnail,*/ song.url));
             if(!msg.guild.voiceConnection) msg.member.voiceChannel.join().then((connection) => {
                 play(connection, msg);
             });
@@ -129,13 +129,9 @@ async function playMusic(msg){
             var urls = urlsObj.data.playlist;
             var validSongCount = 0;
             for(var i = 0; i < urls.length; i++){
-                const songInfo = await ytdl.getInfo(urls[i]);
-                if(songInfo.title){
-                    server.queue.push({requesterID: msg.member.id, url: urls[i], title: songInfo.title});
-                    validSongCount++;
-                }
+                server.queue.push({requesterID: msg.member.id, url: urls[i], title: "Random song!"});
             }
-            msg.channel.send(embedMaker("#27ae60", "Added " + validSongCount + " songs to the queue!", "cute little music bot"));
+            msg.channel.send(embedMaker("#27ae60", "Added " + i + " songs to the queue!", "cute little music bot"));
             
             if(!msg.guild.voiceConnection) msg.member.voiceChannel.join().then((connection) => {
                 play(connection, msg);
@@ -181,11 +177,19 @@ function nowPlaying(msg){
 async function printQueue(msg){
     var server = servers[msg.guild.id];
     var description = "";
-    for(var i = 0; i < server.queue.length; i++){
-        description += "\n" + (i+1) + ": ***" + server.queue[i].title + "***";
+    if(server){
+        for(var i = 0; i < server.queue.length; i++){
+            description += "\n" + (i+1) + ": ***" + server.queue[i].title + "***";
+        }
+        if(description.length == 0) { description = "\n*No queued songs.*"; }
+        msg.channel.send(embedMaker("#27ae60", "Queued songs: " + description));
+    }else{
+        msg.channel.send(embedMaker("#27ae60", "Queued songs: \n*No queued songs.*"));
     }
-    if(description.length == 0) { description = "\n*No queued songs.*"; }
-    msg.channel.send(embedMaker("#27ae60", "Queued songs: " + description));
+}
+
+async function randomplay(msg){
+
 }
 
 function spokenWord(msg){
