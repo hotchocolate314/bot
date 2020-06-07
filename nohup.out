@@ -1,1 +1,235 @@
 Logged in as cute little bot#8442!
+Logged in as cute little bot#8442!
+(node:10895) UnhandledPromiseRejectionWarning: Error: Not a YouTube domain
+    at Object.exports.getURLVideoID (/var/www/discord/node_modules/ytdl-core/lib/util.js:268:12)
+    at Object.exports.getVideoID (/var/www/discord/node_modules/ytdl-core/lib/util.js:293:20)
+    at Object.exports.(anonymous function) [as getFullInfo] (/var/www/discord/node_modules/ytdl-core/lib/info.js:327:21)
+    at Promise (/var/www/discord/node_modules/ytdl-core/lib/info.js:320:24)
+    at new Promise (<anonymous>)
+    at Function.exports.(anonymous function) [as getInfo] (/var/www/discord/node_modules/ytdl-core/lib/info.js:319:14)
+    at playMusic (/var/www/discord/reactions.js:132:37)
+    at command (/var/www/discord/reactions.js:283:17)
+    at respond (/var/www/discord/reactions.js:305:9)
+    at Client.client.on (/var/www/discord/index.js:13:3)
+(node:10895) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 2)
+(node:10895) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+(node:10895) UnhandledPromiseRejectionWarning: Error: Not a YouTube domain
+    at Object.exports.getURLVideoID (/var/www/discord/node_modules/ytdl-core/lib/util.js:268:12)
+    at Object.exports.getVideoID (/var/www/discord/node_modules/ytdl-core/lib/util.js:293:20)
+    at Object.exports.(anonymous function) [as getFullInfo] (/var/www/discord/node_modules/ytdl-core/lib/info.js:327:21)
+    at Promise (/var/www/discord/node_modules/ytdl-core/lib/info.js:320:24)
+    at new Promise (<anonymous>)
+    at Function.exports.(anonymous function) [as getInfo] (/var/www/discord/node_modules/ytdl-core/lib/info.js:319:14)
+    at playMusic (/var/www/discord/reactions.js:132:37)
+    at command (/var/www/discord/reactions.js:283:17)
+    at respond (/var/www/discord/reactions.js:305:9)
+    at Client.client.on (/var/www/discord/index.js:13:3)
+(node:10895) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 4)
+Logged in as cute little bot#8442!
+Logged in as cute little bot#8442!
+Logged in as cute little bot#8442!
+Logged in as cute little bot#8442!
+Logged in as cute little bot#8442!
+Logged in as cute little bot#8442!
+(node:15595) UnhandledPromiseRejectionWarning: Error: The uploader has not made this video available in your country.
+    at request (/var/www/discord/node_modules/ytdl-core/lib/info.js:47:25)
+    at PassThrough.Miniget.stream.on (/var/www/discord/node_modules/miniget/dist/index.js:196:32)
+    at PassThrough.emit (events.js:198:13)
+    at endReadableNT (_stream_readable.js:1145:12)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+(node:15595) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 1)
+(node:15595) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+(node:15595) UnhandledPromiseRejectionWarning: Error: The uploader has not made this video available in your country.
+    at request (/var/www/discord/node_modules/ytdl-core/lib/info.js:47:25)
+    at PassThrough.Miniget.stream.on (/var/www/discord/node_modules/miniget/dist/index.js:196:32)
+    at PassThrough.emit (events.js:198:13)
+    at endReadableNT (_stream_readable.js:1145:12)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+(node:15595) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 2)
+(node:15595) UnhandledPromiseRejectionWarning: Error: The uploader has not made this video available in your country.
+    at request (/var/www/discord/node_modules/ytdl-core/lib/info.js:47:25)
+    at PassThrough.Miniget.stream.on (/var/www/discord/node_modules/miniget/dist/index.js:196:32)
+    at PassThrough.emit (events.js:198:13)
+    at endReadableNT (_stream_readable.js:1145:12)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+(node:15595) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 3)
+(node:15595) UnhandledPromiseRejectionWarning: Error: The uploader has not made this video available in your country.
+    at request (/var/www/discord/node_modules/ytdl-core/lib/info.js:47:25)
+    at PassThrough.Miniget.stream.on (/var/www/discord/node_modules/miniget/dist/index.js:196:32)
+    at PassThrough.emit (events.js:198:13)
+    at endReadableNT (_stream_readable.js:1145:12)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+(node:15595) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 4)
+(node:15595) UnhandledPromiseRejectionWarning: Error: The uploader has not made this video available in your country.
+    at request (/var/www/discord/node_modules/ytdl-core/lib/info.js:47:25)
+    at PassThrough.Miniget.stream.on (/var/www/discord/node_modules/miniget/dist/index.js:196:32)
+    at PassThrough.emit (events.js:198:13)
+    at endReadableNT (_stream_readable.js:1145:12)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+(node:15595) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 5)
+(node:15595) UnhandledPromiseRejectionWarning: Error: The uploader has not made this video available in your country.
+    at request (/var/www/discord/node_modules/ytdl-core/lib/info.js:47:25)
+    at PassThrough.Miniget.stream.on (/var/www/discord/node_modules/miniget/dist/index.js:196:32)
+    at PassThrough.emit (events.js:198:13)
+    at endReadableNT (_stream_readable.js:1145:12)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+(node:15595) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 6)
+(node:15595) UnhandledPromiseRejectionWarning: Error: The uploader has not made this video available in your country.
+    at request (/var/www/discord/node_modules/ytdl-core/lib/info.js:47:25)
+    at PassThrough.Miniget.stream.on (/var/www/discord/node_modules/miniget/dist/index.js:196:32)
+    at PassThrough.emit (events.js:198:13)
+    at endReadableNT (_stream_readable.js:1145:12)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+(node:15595) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 7)
+(node:15595) UnhandledPromiseRejectionWarning: Error: The uploader has not made this video available in your country.
+    at request (/var/www/discord/node_modules/ytdl-core/lib/info.js:47:25)
+    at PassThrough.Miniget.stream.on (/var/www/discord/node_modules/miniget/dist/index.js:196:32)
+    at PassThrough.emit (events.js:198:13)
+    at endReadableNT (_stream_readable.js:1145:12)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+(node:15595) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 8)
+(node:15595) UnhandledPromiseRejectionWarning: Error: No video id found: arab
+    at Object.exports.getURLVideoID (/var/www/discord/node_modules/ytdl-core/lib/util.js:271:12)
+    at Object.exports.getVideoID (/var/www/discord/node_modules/ytdl-core/lib/util.js:293:20)
+    at Object.exports.(anonymous function) [as getFullInfo] (/var/www/discord/node_modules/ytdl-core/lib/info.js:327:21)
+    at Promise (/var/www/discord/node_modules/ytdl-core/lib/info.js:320:24)
+    at new Promise (<anonymous>)
+    at Function.exports.(anonymous function) [as getInfo] (/var/www/discord/node_modules/ytdl-core/lib/info.js:319:14)
+    at playMusic (/var/www/discord/reactions.js:132:37)
+    at command (/var/www/discord/reactions.js:283:17)
+    at respond (/var/www/discord/reactions.js:305:9)
+    at Client.client.on (/var/www/discord/index.js:13:3)
+(node:15595) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 10)
+Logged in as cute little bot#8442!
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+Logged in as cute little bot#8442!
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+(node:4193) UnhandledPromiseRejectionWarning: Error: Not a YouTube domain
+    at Object.exports.getURLVideoID.link [as getURLVideoID] (/var/www/discord/node_modules/ytdl-core/lib/util.js:258:11)
+    at Object.exports.getVideoID.str [as getVideoID] (/var/www/discord/node_modules/ytdl-core/lib/util.js:285:20)
+    at Function.exports.(anonymous function) [as getInfo] (/var/www/discord/node_modules/ytdl-core/lib/info.js:293:19)
+    at playMusic (/var/www/discord/reactions.js:132:37)
+    at command (/var/www/discord/reactions.js:283:17)
+    at respond (/var/www/discord/reactions.js:305:9)
+    at Client.client.on (/var/www/discord/index.js:13:3)
+    at Client.emit (events.js:198:13)
+    at MessageCreateHandler.handle (/var/www/discord/node_modules/discord.js/src/client/websocket/packets/handlers/MessageCreate.js:9:34)
+    at WebSocketPacketManager.handle (/var/www/discord/node_modules/discord.js/src/client/websocket/packets/WebSocketPacketManager.js:108:65)
+(node:4193) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 2)
+(node:4193) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+Logged in as cute little bot#8442!
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+(node:4193) UnhandledPromiseRejectionWarning: Error: Video unavailable
+    at Object.exports.playError (/var/www/discord/node_modules/ytdl-core/lib/util.js:441:12)
+    at exports.getBasicInfo (/var/www/discord/node_modules/ytdl-core/lib/info.js:46:22)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+(node:4193) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 4)
+`info.title` will be removed in a near future release, use `info.videoDetails.title` instead.
+`info.video_url` will be removed in a near future release, use `info.videoDetails.video_url` instead.
+(node:4193) UnhandledPromiseRejectionWarning: Error: Error: Connection not established within 15 seconds.
+    at VoiceConnection.authenticateFailed (/var/www/discord/node_modules/discord.js/src/client/voice/VoiceConnection.js:268:27)
+    at connectTimeout.client.setTimeout (/var/www/discord/node_modules/discord.js/src/client/voice/VoiceConnection.js:297:18)
+    at Timeout.setTimeout (/var/www/discord/node_modules/discord.js/src/client/Client.js:436:7)
+    at ontimeout (timers.js:436:11)
+    at tryOnTimeout (timers.js:300:5)
+    at listOnTimeout (timers.js:263:5)
+    at Timer.processTimers (timers.js:223:10)
+(node:4193) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 5)
+Logged in as cute little bot#8442!

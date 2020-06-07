@@ -4,9 +4,20 @@ const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const {prefix} = require('./config.json');
 const discord = require("discord.js");
 const ytlist = require('youtube-playlist');
+const rand = require('csprng');
+const humanizeDuration = require('humanize-duration')
 
 var servers = {}; //global variable to hold music queue
 var copypastaObject; //global variable to hold retrieved copypastas
+
+const serverRadio = {
+    Stop: [], //used to stop the radio
+    PlaylistItems: [], //used to hold the server radio playlist items
+    CurrentItem: [], //used for holding the server radio current item
+    BotConnections: [], //used to hold the server bot connections
+    StartTime: [], //used for holding the start times
+    Dispatchers: [] //used for stopping playback immediately
+};
 
 //initialising variables and stuff below
 loadNewPasta(); //this initialises the object to contain a pasta as soon as the server starts
@@ -71,7 +82,7 @@ function embedMaker(colour, description, title, image, link){
     if(colour) embed.setColor(colour);
     if(title) embed.setTitle(title);
     if(description) embed.setDescription(description);
-    //if(image) embed.setImage(image);
+    if(image) embed.setImage(image);
     if(link) embed.setFooter(link);
     return embed;
 }
@@ -84,8 +95,8 @@ async function playMusic(msg){
 
         const songInfo = await ytdl.getInfo(server.queue[0].url);
         const song = {
-            title: songInfo.title,
-            url: songInfo.video_url,
+            title: songInfo.videoDetails.title,
+            url: songInfo.videoDetails.video_url,
             //thumbnail: songInfo.player_response.videoDetails.thumbnail["thumbnails"][3]["url"]
         };
 
@@ -131,8 +142,8 @@ async function playMusic(msg){
     if(msg.content[1].search('playlist') == -1){ //different routine if it's a playlist
         const songInfo = await ytdl.getInfo(msg.content[1]);
         const song = {
-            title: songInfo.title,
-            url: songInfo.video_url,
+            title: songInfo.videoDetails.title,
+            url: songInfo.videoDetails.video_url,
             //thumbnail: songInfo.player_response.videoDetails.thumbnail["thumbnails"][3]["url"]
         };
 
@@ -161,7 +172,6 @@ async function playMusic(msg){
             if(!msg.guild.voiceConnection) msg.member.voiceChannel.join().then((connection) => {
                 play(connection, msg);
             });
-
         }
 
         var url = msg.content[1];
@@ -252,6 +262,124 @@ function spokenWord(msg){
     }
 }
 
+async function playRadio(msg){
+    const command = msg.content.split(" ")[1];
+    const url = msg.content.split(" ")[2];
+
+    if(command === 'stop') {
+        serverRadio.Stop[msg.guild.id] = false; //sets a flag to naturally stop the radioLoop for this server
+        serverRadio.Dispatchers[msg.guild.id].end(); //ends the currently playing track
+        serverRadio.BotConnections[msg.guild.id].disconnect(); //disconnects the bot from the channel it's in
+        serverRadio.PlaylistItems[msg.guild.id] = []; //clear the radio queue
+        serverRadio.CurrentItem[msg.guild.id] = ""; //resets the current item
+        serverRadio.StartTime = 0; //resets the start time
+        return serverRadio.Stop[msg.guild.id] = true; //stop the radio
+    }
+
+    if(command === 'np'){
+        if(serverRadio.CurrentItem[msg.guild.id]){
+            const song = serverRadio.CurrentItem[msg.guild.id];
+            msg.channel.send(embedMaker("#27ae60", "Currently playing:\n***" + song.title + "***", "cute little music bot", song.preview, song.url));
+            return;
+        }else{
+            msg.channel.send(embedMaker("#27ae60", "Nothing playing right now."));
+            return;
+        }
+    }
+
+    if(command === 'uptime'){
+        if(serverRadio.StartTime[msg.guild.id]){
+            msg.channel.send(embedMaker("#27ae60", `Current uptime: ${humanizeDuration(Date.now() - serverRadio.StartTime[msg.guild.id])}`));
+            return;
+        }else{
+            msg.channel.send(embedMaker("#27ae60", "Nothing playing right now."));
+            return;
+        }
+    }
+
+    if(command != 'play'){
+        msg.channel.send(embedMaker("#27ae60", "Invalid command."));
+        return;
+    }
+
+    if(!msg.content[1]){
+        msg.channel.send(embedMaker("#27ae60", "You need to provide a link."));
+        return;
+    }
+
+    if(!msg.member.voiceChannel){
+        msg.channel.send(embedMaker("#27ae60", "Join a voice channel first."));
+        return;
+    }
+
+    if(serverRadio.PlaylistItems[msg.guild.id]){
+        if(serverRadio.PlaylistItems[msg.guild.id].length != 0){
+            msg.channel.send(embedMaker("#27ae60", `Stop the current radio playback first.`));
+            return;
+        }
+    }
+
+    const server = servers[msg.guild.id];
+    serverRadio.Stop[msg.guild.id] = false; //set the server stop flag
+    try {
+        serverRadio.BotConnections[msg.guild.id] = await msg.member.voiceChannel.join(); //saves the connection
+        serverRadio.PlaylistItems[msg.guild.id] = (await ytlist(url, "url")).data.playlist; //saves the playlist
+    } catch(err) {
+        console.log("(YTLIST) " + err);
+        msg.channel.send(embedMaker("#27ae60", "An error occurred getting the playlist data, or joining the voice channel."));
+        return;
+    }
+
+    serverRadio.StartTime[msg.guild.id] = Date.now();
+    radioLoop(msg.guild.id, -1);
+}
+
+async function radioLoop(guildID, previousIndex){
+    if(serverRadio.Stop[guildID]) { //if the flag to stop the radio has been set, then just return
+        return 0; //return from this, the radio is stopped
+    }
+
+    let currentIndex = rand(14, 10) % serverRadio.PlaylistItems[guildID].length;
+    while(previousIndex === currentIndex){
+        currentIndex = rand(14, 10) % serverRadio.PlaylistItems[guildID].length; //keep on randomly generating until you get one which isn't the previous index
+    }
+
+    let songInfo, song; //will hold the songInfo from ytdl.getInfo(...) and then title, url and preview image respectively
+    let playableOrNot = true; //flag for the current track, if it's set to false, there's an issue
+
+    try {
+        songInfo = await ytdl.getInfo(serverRadio.PlaylistItems[guildID][currentIndex]);
+        song = {
+            title: songInfo.videoDetails.title,
+            url: songInfo.videoDetails.video_url,
+            //preview: songInfo.videoDetails.thumbnail.thumbnails[3].url
+        };
+    } catch(err) {
+        console.log("(YTDLGETINFO) " + err);
+        playableOrNot = false;
+    }
+
+    serverRadio.CurrentItem[guildID] = song;
+
+    if(playableOrNot){ //it can't get vid details and stuff if this is undefined
+        try {
+            serverRadio.Dispatchers[guildID] = serverRadio.BotConnections[guildID].playStream(ytdl(song.url, {quality: "highestaudio"})); //plays the music
+        } catch(err) {
+            console.log("(PLAYSTREAM/YTDL) " + err);
+            playableOrNot = false; //error occurred, go to the next song
+        }
+    }
+
+    if(playableOrNot = false){ //error occurred, just go to the next song then
+        return radioLoop(guildID, currentIndex); //will play the next song
+    }
+
+    serverRadio.Dispatchers[guildID].on("end", () => {
+        radioLoop(guildID, currentIndex); //will play the next song
+    });
+
+}
+
 function say(msg){
     msg.content = msg.content.slice(4, msg.content.length);
     msg.channel.send(msg.content);
@@ -293,6 +421,10 @@ function command(msg){
                 break;
             case 'stop':
                 stop(msg);
+                break;
+            case 'radio':
+                //if(msg.author.id !== '128088350287593472') return -1; this will restrict to me (Fate)
+                playRadio(msg);
                 break;
         }
     }
