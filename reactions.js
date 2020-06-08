@@ -7,6 +7,10 @@ const ytlist = require('youtube-playlist');
 const rand = require('csprng');
 const humanizeDuration = require('humanize-duration')
 
+//the ytlist stuff doesn't return a full playlist, so use this instead for more than 100 items (it'll only be used by me though for now)
+const youtubeDetailsGet = require('./youtubeApiInteractions');
+const youtubeApiKey = require('./secret');
+
 var servers = {}; //global variable to hold music queue
 var copypastaObject; //global variable to hold retrieved copypastas
 
@@ -339,16 +343,20 @@ async function playRadio(msg){
     }
 
     try {
-        serverRadio.PlaylistItems[msg.guild.id] = (await ytlist(url, "url")).data.playlist; //saves the playlist
+        if(msg.author.id === '128088350287593472'){ //when it's just me (Fate) it'll use the youtubeApiKey, so more than 100 items can be added
+            serverRadio.PlaylistItems[msg.guild.id] = (await youtubeDetailsGet(youtubeApiKey, url)).items; //saves the playlist
+        }else{
+            serverRadio.PlaylistItems[msg.guild.id] = (await ytlist(url, "url")).data.playlist; //saves the playlist
+        }
     } catch(err) {
-        console.log("(YTLIST) " + err);
+        console.log("(YTLISTGET) " + err);
         msg.channel.send(embedMaker("#27ae60", "An error occurred getting the playlist data."));
         radioStopRoutine(msg.guild.id); //stop the radio properly
         return;
     }
 
     serverRadio.StartTime[msg.guild.id] = Date.now();
-    msg.channel.send(embedMaker("#27ae60", "Starting the radio!"));
+    msg.channel.send(embedMaker("#27ae60", `Started the radio with ${serverRadio.PlaylistItems[msg.guild.id].length} items!`));
     radioLoop(msg.guild.id, -1);
 }
 
@@ -441,7 +449,6 @@ function command(msg){
                 stop(msg);
                 break;
             case 'radio':
-                //if(msg.author.id !== '128088350287593472') return -1; this will restrict to me (Fate)
                 playRadio(msg);
                 break;
         }
