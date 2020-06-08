@@ -233,3 +233,60 @@ Logged in as cute little bot#8442!
     at Timer.processTimers (timers.js:223:10)
 (node:4193) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 5)
 Logged in as cute little bot#8442!
+Logged in as cute little bot#8442!
+Logged in as cute little bot#8442!
+(YTLIST) Error: Error: Connection not established within 15 seconds.
+(YTLIST) Error: Error: Connection not established within 15 seconds.
+(node:11507) UnhandledPromiseRejectionWarning: Error: Error: Connection not established within 15 seconds.
+    at VoiceConnection.authenticateFailed (/var/www/discord/node_modules/discord.js/src/client/voice/VoiceConnection.js:268:27)
+    at connectTimeout.client.setTimeout (/var/www/discord/node_modules/discord.js/src/client/voice/VoiceConnection.js:297:18)
+    at Timeout.setTimeout (/var/www/discord/node_modules/discord.js/src/client/Client.js:436:7)
+    at ontimeout (timers.js:436:11)
+    at tryOnTimeout (timers.js:300:5)
+    at listOnTimeout (timers.js:263:5)
+    at Timer.processTimers (timers.js:223:10)
+(node:11507) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 1)
+(node:11507) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+(node:11507) UnhandledPromiseRejectionWarning: TypeError: Cannot read property 'end' of undefined
+    at playRadio (/var/www/discord/reactions.js:271:47)
+    at command (/var/www/discord/reactions.js:430:17)
+    at respond (/var/www/discord/reactions.js:440:9)
+    at Client.client.on (/var/www/discord/index.js:13:3)
+    at Client.emit (events.js:198:13)
+    at MessageCreateHandler.handle (/var/www/discord/node_modules/discord.js/src/client/websocket/packets/handlers/MessageCreate.js:9:34)
+    at WebSocketPacketManager.handle (/var/www/discord/node_modules/discord.js/src/client/websocket/packets/WebSocketPacketManager.js:108:65)
+    at WebSocketConnection.onPacket (/var/www/discord/node_modules/discord.js/src/client/websocket/WebSocketConnection.js:336:35)
+    at WebSocketConnection.onMessage (/var/www/discord/node_modules/discord.js/src/client/websocket/WebSocketConnection.js:299:17)
+    at WebSocket.onMessage (/var/www/discord/node_modules/ws/lib/event-target.js:120:16)
+(node:11507) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 2)
+(node:11507) UnhandledPromiseRejectionWarning: Error: Error: Connection not established within 15 seconds.
+    at VoiceConnection.authenticateFailed (/var/www/discord/node_modules/discord.js/src/client/voice/VoiceConnection.js:268:27)
+    at connectTimeout.client.setTimeout (/var/www/discord/node_modules/discord.js/src/client/voice/VoiceConnection.js:297:18)
+    at Timeout.setTimeout (/var/www/discord/node_modules/discord.js/src/client/Client.js:436:7)
+    at ontimeout (timers.js:436:11)
+    at tryOnTimeout (timers.js:300:5)
+    at listOnTimeout (timers.js:263:5)
+    at Timer.processTimers (timers.js:223:10)
+(node:11507) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 3)
+(node:11507) UnhandledPromiseRejectionWarning: Error: Error: Connection not established within 15 seconds.
+    at VoiceConnection.authenticateFailed (/var/www/discord/node_modules/discord.js/src/client/voice/VoiceConnection.js:268:27)
+    at connectTimeout.client.setTimeout (/var/www/discord/node_modules/discord.js/src/client/voice/VoiceConnection.js:297:18)
+    at Timeout.setTimeout (/var/www/discord/node_modules/discord.js/src/client/Client.js:436:7)
+    at ontimeout (timers.js:436:11)
+    at tryOnTimeout (timers.js:300:5)
+    at listOnTimeout (timers.js:263:5)
+    at Timer.processTimers (timers.js:223:10)
+(node:11507) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 4)
+(node:11507) UnhandledPromiseRejectionWarning: TypeError: Cannot read property 'currentlyPlaying' of undefined
+    at nowPlaying (/var/www/discord/reactions.js:208:15)
+    at command (/var/www/discord/reactions.js:423:17)
+    at respond (/var/www/discord/reactions.js:440:9)
+    at Client.client.on (/var/www/discord/index.js:13:3)
+    at Client.emit (events.js:198:13)
+    at MessageCreateHandler.handle (/var/www/discord/node_modules/discord.js/src/client/websocket/packets/handlers/MessageCreate.js:9:34)
+    at WebSocketPacketManager.handle (/var/www/discord/node_modules/discord.js/src/client/websocket/packets/WebSocketPacketManager.js:108:65)
+    at WebSocketConnection.onPacket (/var/www/discord/node_modules/discord.js/src/client/websocket/WebSocketConnection.js:336:35)
+    at WebSocketConnection.onMessage (/var/www/discord/node_modules/discord.js/src/client/websocket/WebSocketConnection.js:299:17)
+    at WebSocket.onMessage (/var/www/discord/node_modules/ws/lib/event-target.js:120:16)
+(node:11507) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 5)
+(YTDLGETINFO) TypeError [ERR_INVALID_ARG_TYPE]: The "url" argument must be of type string. Received type undefined

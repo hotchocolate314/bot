@@ -82,7 +82,7 @@ function embedMaker(colour, description, title, image, link){
     if(colour) embed.setColor(colour);
     if(title) embed.setTitle(title);
     if(description) embed.setDescription(description);
-    if(image) embed.setImage(image);
+    if(image && image != '[NO_IMAGE]') embed.setImage(image);
     if(link) embed.setFooter(link);
     return embed;
 }
@@ -101,7 +101,7 @@ async function playMusic(msg){
         };
 
         if(song.title){ //it can't get vid details and stuff if this is undefined
-            msg.channel.send(embedMaker("#27ae60", "Now playing:\n***" + song.title + "***", "cute little music bot", /*song.thumbnail,*/ song.url));
+            msg.channel.send(embedMaker("#27ae60", "Now playing:\n***" + song.title + "***", "cute little music bot", '[NO_IMAGE]', song.url));
 
             server.currentlyPlaying = {};
             server.currentlyPlaying.title = song.title;
@@ -138,7 +138,7 @@ async function playMusic(msg){
     }
 
     var server = servers[msg.guild.id];
-    
+
     if(msg.content[1].search('playlist') == -1){ //different routine if it's a playlist
         const songInfo = await ytdl.getInfo(msg.content[1]);
         const song = {
@@ -155,7 +155,7 @@ async function playMusic(msg){
         server.queue.push(pushItem);
 
         if(song.title){ //it can't get vid details and stuff if this is undefined
-            msg.channel.send(embedMaker("#27ae60", "Added song to queue:\n***" + song.title + "***", "cute little music bot", /*song.thumbnail,*/ song.url));
+            msg.channel.send(embedMaker("#27ae60", "Added song to queue:\n***" + song.title + "***", "cute little music bot", '[NO_IMAGE]', song.url));
             if(!msg.guild.voiceConnection) msg.member.voiceChannel.join().then((connection) => {
                 play(connection, msg);
             });
@@ -168,7 +168,7 @@ async function playMusic(msg){
                 server.queue.push({requesterID: msg.member.id, url: urls[i], title: "Random song!"});
             }
             msg.channel.send(embedMaker("#27ae60", "Added " + i + " songs to the queue!", "cute little music bot"));
-            
+
             if(!msg.guild.voiceConnection) msg.member.voiceChannel.join().then((connection) => {
                 play(connection, msg);
             });
@@ -262,24 +262,29 @@ function spokenWord(msg){
     }
 }
 
+function radioStopRoutine(guildID){ //stops the radio, and resets respective variables
+    serverRadio.Stop[guildID] = false; //sets a flag to naturally stop the radioLoop for this server
+    if(serverRadio.Dispatchers[guildID]) serverRadio.Dispatchers[guildID].end(); //ends the currently playing track, if one is playing
+    serverRadio.BotConnections[guildID].disconnect(); //disconnects the bot from the channel it's in
+    serverRadio.PlaylistItems[guildID] = []; //clear the radio queue
+    serverRadio.CurrentItem[guildID] = ""; //resets the current item
+    serverRadio.StartTime[guildID] = 0; //resets the start time
+    return serverRadio.Stop[guildID] = true; //stop the radio
+}
+
 async function playRadio(msg){
     const command = msg.content.split(" ")[1];
     const url = msg.content.split(" ")[2];
 
     if(command === 'stop') {
-        serverRadio.Stop[msg.guild.id] = false; //sets a flag to naturally stop the radioLoop for this server
-        serverRadio.Dispatchers[msg.guild.id].end(); //ends the currently playing track
-        serverRadio.BotConnections[msg.guild.id].disconnect(); //disconnects the bot from the channel it's in
-        serverRadio.PlaylistItems[msg.guild.id] = []; //clear the radio queue
-        serverRadio.CurrentItem[msg.guild.id] = ""; //resets the current item
-        serverRadio.StartTime = 0; //resets the start time
-        return serverRadio.Stop[msg.guild.id] = true; //stop the radio
+        radioStopRoutine(msg.guild.id); //stops the radio
     }
 
     if(command === 'np'){
         if(serverRadio.CurrentItem[msg.guild.id]){
             const song = serverRadio.CurrentItem[msg.guild.id];
-            msg.channel.send(embedMaker("#27ae60", "Currently playing:\n***" + song.title + "***", "cute little music bot", song.preview, song.url));
+            //replace '[NO_IMAGE]' with song.preview to get a song preview working
+            msg.channel.send(embedMaker("#27ae60", "Currently playing:\n***" + song.title + "***", "cute little music bot", '[NO_IMAGE]', song.url));
             return;
         }else{
             msg.channel.send(embedMaker("#27ae60", "Nothing playing right now."));
@@ -319,18 +324,31 @@ async function playRadio(msg){
         }
     }
 
+    msg.channel.send(embedMaker("#27ae60", "Queueing items..."));
+
     const server = servers[msg.guild.id];
-    serverRadio.Stop[msg.guild.id] = false; //set the server stop flag
+    serverRadio.Stop[msg.guild.id] = false; //make sure the server radio stop flag is reset
+
     try {
-        serverRadio.BotConnections[msg.guild.id] = await msg.member.voiceChannel.join(); //saves the connection
+        serverRadio.BotConnections[msg.guild.id] = await msg.member.voiceChannel.join(); //joins the voice channel, and saves the connection
+    } catch(err) {
+        console.log("(CHANNELJOIN) " + err);
+        msg.channel.send(embedMaker("#27ae60", "An error occurred when joining the voice channel."));
+        radioStopRoutine(msg.guild.id); //stop the radio properly
+        return;
+    }
+
+    try {
         serverRadio.PlaylistItems[msg.guild.id] = (await ytlist(url, "url")).data.playlist; //saves the playlist
     } catch(err) {
         console.log("(YTLIST) " + err);
-        msg.channel.send(embedMaker("#27ae60", "An error occurred getting the playlist data, or joining the voice channel."));
+        msg.channel.send(embedMaker("#27ae60", "An error occurred getting the playlist data."));
+        radioStopRoutine(msg.guild.id); //stop the radio properly
         return;
     }
 
     serverRadio.StartTime[msg.guild.id] = Date.now();
+    msg.channel.send(embedMaker("#27ae60", "Starting the radio!"));
     radioLoop(msg.guild.id, -1);
 }
 
@@ -352,7 +370,7 @@ async function radioLoop(guildID, previousIndex){
         song = {
             title: songInfo.videoDetails.title,
             url: songInfo.videoDetails.video_url,
-            //preview: songInfo.videoDetails.thumbnail.thumbnails[3].url
+            preview: songInfo.videoDetails.thumbnail.thumbnails[3].url
         };
     } catch(err) {
         console.log("(YTDLGETINFO) " + err);
